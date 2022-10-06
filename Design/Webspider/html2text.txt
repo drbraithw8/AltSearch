@@ -1,0 +1,122 @@
+
+HTML2Text
+=========
+
+Useful options supplied directly to html2text
+---------------------------------------------
+
+-ascii
+	By default, when -nometa is supplied, html2text uses  UTF-8  for
+	the output. Specifying this option, plain ASCII is used instead.  To
+	find out how non-ASCII characters are rendered, refer to  the file
+	"ascii.substitutes".
+
+-o output-file
+	Write the output to output-file instead of  standard  output.
+
+-rcfile path
+	Attempt to read the file specified in path as RC file.
+
+-links
+	Generate reference list with link targets.
+
+
+Useful options supplied directly to html2text
+.............................................
+
+-ascii
+	By default, when -nometa is supplied, html2text uses  UTF-8  for
+	the output. Specifying this option, plain ASCII is used instead.  To
+	find out how non-ASCII characters are rendered, refer to  the file
+	"ascii.substitutes".
+
+-o output-file
+	Write the output to output-file instead of  standard  output.
+
+-rcfile path
+	Attempt to read the file specified in path as RC file.
+
+-links
+	Generate reference list with link targets.
+
+	Package manager version of html2text does not have this feature.
+	Nor does most of the man pages on the internet.  The source code
+	version, (https://github.com/grobian/html2text) does have this
+	version.  It is not well explained.  Will discover what this does
+	through experimentation.
+
+
+Useful options supplied via .html2textrc
+........................................
+
+*	White-space in .html2textrc must be quoted with backslashes (i.e. "\ ").
+*	There are 24 options that you can specify in .html2textrc.  I need
+	to provide no-op (do-nothing) or as near to no-op values as is
+	possible for EACH of them.
+
+Conclusion
+..........
+*	It works.
+
+*	It seems to work hard for everything that I am trying to turn off.
+	*	Tries to find alternative ways to mark up a document.  Tries to
+		be a plain text web browser.
+	*	Slow as a result.
+	*	Complicated as a result.
+
+*	Im starting to think that I would be better off writing something of
+	my own.
+
+	Package manager version of html2text does not have this feature.
+	Nor does most of the man pages on the internet.  The source code
+	version, (https://github.com/grobian/html2text) does have this
+	version.  It is not well explained.  Will discover what this does
+	through experimentation.
+
+
+Useful options supplied via .html2textrc
+----------------------------------------
+
+*	White-space in .html2textrc must be quoted with backslashes (i.e. "\ ").
+*	There are 24 options that you can specify in .html2textrc.  I need
+	to provide no-op (do-nothing) or as near to no-op values as is
+	possible for EACH of them.
+
+Conclusion
+----------
+
+*	Could change the code so that the reference lists "-links" are
+	pushed to a separate file.
+
+*	It works.  Takes care of:-
+	*	Character encoding.
+	*	Javascript
+	*	CSS
+	*	Tags
+		*	Some always have closing tags.
+		*	Some never have closing tags.
+		*	Some sometimes have closing tags.
+	*	Links
+
+*	It seems to work hard for everything that I am trying to turn off.
+	*	Tries to find alternative ways to mark up a document.  Tries to
+		be a plain text web browser.
+	*	Slow as a result.
+	*	Complicated as a result.
+
+
+
+Making my own
+=============
+
+*	Im starting to think that I would be better off writing something of
+	my own.  Later, because it has to cope with stuff like javascript.
+
+*	Would be much faster because it attempts to do much less.
+
+*	Would be much simpler.
+
+*	Javascript would be a pain.
+	*	I have to look for the end tag, i.e. </script> tag.
+	*	There could be one in a string.
+		*	Need to parse out strings.

@@ -1,0 +1,68 @@
+							Preface
+							=======
+This documents some ideas that occurred to me one night.
+I thought the ideas may be worth capturing, but the ideas are not complete.
+These ideas may be worth pursuing later, or may turn out to be not a good idea.
+
+							Introduction
+							============
+
+Let Sw(D) refer to the set of non-trivial words that occur at least once
+in document D.
+
+Most of Sw(Di) and Sw(Dj) will occur in the intersection of Sw(Di) and
+Sw(Dj) for documents about the same topic.
+A more intelligent algorithm might take advantage of this.
+
+
+
+						Existing Design
+						===============
+
+The data structure proposed for AltSearch is like this:-
+
+Common Words
+*	Indexed on common words.  May feature a bitmap of documents that
+	have those common words.
+
+Words structure
+*	Indexed on the hashes of words, giving records that contains the
+	word, and a list of the hashes of documents containing those words.
+
+Documents structure
+*	Indexed on the hash of the URL, giving records that have properties
+	of the document, as well as a list of the hashes of words existing
+	in the document.
+
+
+						Proposed Design
+						===============
+
+Introducing Groups
+------------------
+
+The words structure records will contain not only a list of
+the hashes of documents, but also a list of the hashes of groups of
+documents.
+
+A group of document has:-
+*	A list of words
+*	A list of documents that contain all of those words.
+
+The words structure will no longer have to have the hash of each
+document in its list, because each group will refer to many documents.
+
+The power of a group, P(G), is given by the number of words multiplied
+byt the number of documents.
+
+
+Creation of Groups
+------------------
+*	Start with a group having one document with many words.
+*	If adding a document substantially increases the power of the group,
+	then go ahead and add the document and remove words that are no
+	longer in common with all documents.
+
+
+Use of Groups
+-------------

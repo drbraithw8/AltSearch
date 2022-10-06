@@ -1,0 +1,132 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALL	makefile	/^ALL := procHtml$/;"	m
+CKCK	inch.h	41;"	d
+LIBS	makefile	/^LIBS :=  -L \/usr\/local\/lib -lCscNet -lpthread$/;"	m
+N_Lookahead	inch.c	12;"	d	file:
+__gtagDataLayer	HtmlSamples/consortium1.html	/^					function __gtagDataLayer() {$/;"	f
+__gtagDataLayer	HtmlSamples/grayzone1.html	/^					function __gtagDataLayer() {$/;"	f
+__gtagTracker	HtmlSamples/consortium1.html	/^							function __gtagTracker() {$/;"	f
+__gtagTracker	HtmlSamples/consortium1.html	/^					function __gtagTracker( type, name, parameters ) {$/;"	f
+__gtagTracker	HtmlSamples/grayzone1.html	/^							function __gtagTracker() {$/;"	f
+__gtagTracker	HtmlSamples/grayzone1.html	/^					function __gtagTracker( type, name, parameters ) {$/;"	f
+__gtagTrackerIsOptedOut	HtmlSamples/consortium1.html	/^				function __gtagTrackerIsOptedOut() {$/;"	f
+__gtagTrackerIsOptedOut	HtmlSamples/grayzone1.html	/^				function __gtagTrackerIsOptedOut() {$/;"	f
+__gtagTrackerOptout	HtmlSamples/consortium1.html	/^				function __gtagTrackerOptout() {$/;"	f
+__gtagTrackerOptout	HtmlSamples/grayzone1.html	/^				function __gtagTrackerOptout() {$/;"	f
+amp	bodyChar.c	/^	char amp[bodyCh_ampMax+1];$/;"	m	struct:bodyCh_t	file:
+asc	bodyChar.c	/^	char asc[4];   \/\/ ASCII equivalent string.$/;"	m	struct:unLkpEnt_t	file:
+baseUrl	procHtml.c	/^    char *baseUrl;$/;"	m	struct:procHtml_t	file:
+bc	procHtml.c	/^	bodyCh_t *bc;$/;"	m	struct:procHtml_t	file:
+bodyCh_ampMax	bodyChar.c	/^	 , bodyCh_ampMax=12$/;"	e	enum:__anon1	file:
+bodyCh_ch	bodyChar.c	/^void bodyCh_ch(bodyCh_t *bc, int ch)$/;"	f
+bodyCh_free	bodyChar.c	/^void bodyCh_free(bodyCh_t *bc)$/;"	f
+bodyCh_new	bodyChar.c	/^bodyCh_t *bodyCh_new(const char *transStr)$/;"	f
+bodyCh_setTrans	bodyChar.c	/^void bodyCh_setTrans(bodyCh_t *bc, const char *transStr)$/;"	f
+bodyCh_state_Amp	bodyChar.c	/^			 , bodyCh_state_Amp=2$/;"	e	enum:__anon2	file:
+bodyCh_state_None	bodyChar.c	/^typedef enum { bodyCh_state_None=0$/;"	e	enum:__anon2	file:
+bodyCh_state_Url	bodyChar.c	/^			 , bodyCh_state_Url=1$/;"	e	enum:__anon2	file:
+bodyCh_state_t	bodyChar.c	/^			 } bodyCh_state_t;$/;"	t	typeref:enum:__anon2	file:
+bodyCh_t	bodyChar.c	/^typedef struct bodyCh_t$/;"	s	file:
+bodyCh_t	bodyChar.c	/^} bodyCh_t;$/;"	t	typeref:struct:bodyCh_t	file:
+bodyCh_t	bodyChar.h	/^typedef struct bodyCh_t bodyCh_t;$/;"	t	typeref:struct:bodyCh_t
+bodyCh_transStrMax	bodyChar.c	/^enum { bodyCh_transStrMax=15$/;"	e	enum:__anon1	file:
+bodyCh_word	bodyChar.c	/^static void bodyCh_word(bodyCh_t *bc)$/;"	f	file:
+bodyCh_wordMax	bodyChar.c	/^	 , bodyCh_wordMax=32$/;"	e	enum:__anon1	file:
+chPos	inch.c	/^	int chPos, lineNo, linePos;$/;"	m	struct:inch_t	file:
+defaultCharset	procHtml.c	/^    char defaultCharset[procHtml_charsetMax+1];$/;"	m	struct:procHtml_t	file:
+dict	bodyChar.c	/^	csc_hash_t *dict;$/;"	m	struct:bodyCh_t	file:
+dictEntry_new	dict.c	/^char *dictEntry_new(char *lkup, char *target)$/;"	f
+doCh	bodyChar.c	/^static void doCh(bodyCh_t *bc, int ch)$/;"	f	file:
+eatJscript	procHtml.c	/^int eatJscript(inch_t *inch, char *tagOpen)$/;"	f
+explicitCharset	procHtml.c	/^    char explicitCharset[procHtml_charsetMax+1];$/;"	m	struct:procHtml_t	file:
+fin	inch.c	/^{	FILE *fin;$/;"	m	struct:inch_t	file:
+gaOptout	HtmlSamples/consortium1.html	/^					function gaOptout() {$/;"	f
+gaOptout	HtmlSamples/grayzone1.html	/^					function gaOptout() {$/;"	f
+getCh	inch.c	/^	int (*getCh)(FILE *fin);$/;"	m	struct:inch_t	file:
+gtag	HtmlSamples/mintPress1.html	/^				function gtag() {$/;"	f
+heateorSssLoadEvent	HtmlSamples/grayzone1.html	/^function heateorSssLoadEvent(e) {var t=window.onload;if (typeof window.onload!="function") {window.onload=e}else{window.onload=function() {t();e()}}};	var heateorSssSharingAjaxUrl = 'https:\/\/thegrayzone.com\/wp-admin\/admin-ajax.php', heateorSssCloseIconPath = 'https:\/\/thegrayzone.com\/wp-content\/plugins\/sassy-social-share\/public\/..\/images\/close.png', heateorSssPluginIconPath = 'https:\/\/thegrayzone.com\/wp-content\/plugins\/sassy-social-share\/public\/..\/images\/logo.png', heateorSssHorizontalSharingCountEnable = 0, heateorSssVerticalSharingCountEnable = 0, heateorSssSharingOffset = -10; var heateorSssMobileStickySharingEnabled = 0;var heateorSssCopyLinkMessage = "Link copied.";var heateorSssUrlCountFetched = [], heateorSssSharesText = 'Shares', heateorSssShareText = 'Share';function heateorSssPopup(e) {window.open(e,"popUpWindow","height=400,width=600,left=400,top=100,resizable,scrollbars,toolbar=0,personalbar=0,menubar=no,location=no,directories=no,status")}$/;"	f
+htmlTagA	procHtml.c	/^int htmlTagA( procHtml_t *ph$/;"	f
+htmlTagTitle	procHtml.c	/^int htmlTagTitle(inch_t *inch, char *title, int titleMax)$/;"	f
+iAmp	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
+iWdCount	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
+iWord	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
+inCh_ascii	inch.c	/^static int inCh_ascii(FILE *fin)$/;"	f	file:
+inCh_utf8	inch.c	/^static int inCh_utf8(FILE *fin)$/;"	f	file:
+inch	procHtml.c	/^{	inch_t *inch;$/;"	m	struct:procHtml_t	file:
+inch_curCh	inch.c	/^int inch_curCh(inch_t *inch)$/;"	f
+inch_free	inch.c	/^void inch_free(inch_t *inch)$/;"	f
+inch_lookAhead	inch.c	/^char *inch_lookAhead(inch_t *inch, char buf[5])$/;"	f
+inch_new	inch.c	/^inch_t *inch_new(FILE *fin)$/;"	f
+inch_next	inch.c	/^int inch_next(inch_t *inch)$/;"	f
+inch_reportPos	inch.c	/^void inch_reportPos(inch_t *inch, FILE *fout)$/;"	f
+inch_set_getAscChar	inch.c	/^csc_bool_t inch_set_getAscChar(inch_t *inch, const char *charset)$/;"	f
+inch_t	inch.c	/^typedef struct inch_t$/;"	s	file:
+inch_t	inch.c	/^} inch_t;$/;"	t	typeref:struct:inch_t	file:
+inch_t	inch.h	/^typedef struct inch_t inch_t;$/;"	t	typeref:struct:inch_t
+isCap	bodyChar.c	/^	csc_bool_t isCap;$/;"	m	struct:bodyCh_t	file:
+isNewSentance	bodyChar.c	/^	csc_bool_t isNewSentance;$/;"	m	struct:bodyCh_t	file:
+lineNo	inch.c	/^	int chPos, lineNo, linePos;$/;"	m	struct:inch_t	file:
+linePos	inch.c	/^	int chPos, lineNo, linePos;$/;"	m	struct:inch_t	file:
+main	procHtml.c	/^void main(int argc, char **argv)$/;"	f
+main	server.c	/^void main(int argc, char **argv)$/;"	f
+mapArgs	HtmlSamples/consortium1.html	/^								function mapArgs( args ) {$/;"	f
+mapArgs	HtmlSamples/grayzone1.html	/^								function mapArgs( args ) {$/;"	f
+procHtml_charsetMax	procHtml.c	/^	 ,	procHtml_charsetMax = 15$/;"	e	enum:__anon3	file:
+procHtml_free	procHtml.c	/^void procHtml_free(procHtml_t *ph)$/;"	f
+procHtml_new	procHtml.c	/^procHtml_t *procHtml_new( inch_t *inch$/;"	f
+procHtml_readHtml	procHtml.c	/^void procHtml_readHtml(procHtml_t *ph)$/;"	f
+procHtml_t	procHtml.c	/^typedef struct procHtml_t$/;"	s	file:
+procHtml_t	procHtml.c	/^} procHtml_t;$/;"	t	typeref:struct:procHtml_t	file:
+procHtml_titleMax	procHtml.c	/^enum {	procHtml_titleMax = 200$/;"	e	enum:__anon3	file:
+progname	server.c	/^char *progname;$/;"	v
+que	inch.c	/^	int que[N_Lookahead+1];$/;"	m	struct:inch_t	file:
+queFirst	inch.c	/^	int queFirst, queFree;$/;"	m	struct:inch_t	file:
+queFree	inch.c	/^	int queFirst, queFree;$/;"	m	struct:inch_t	file:
+que_isempty	inch.c	22;"	d	file:
+que_isfull	inch.c	23;"	d	file:
+readBody	procHtml.c	/^int readBody(procHtml_t *ph)$/;"	f
+readDict	dict.c	/^csc_hash_t *readDict(FILE *fin)$/;"	f
+readDictPath	dict.c	/^csc_hash_t *readDictPath(const char *path)$/;"	f
+readHead	procHtml.c	/^int readHead(procHtml_t *ph)$/;"	f
+readMeta	procHtml.c	/^int readMeta(inch_t *inch, char *charset, int charsetMax)$/;"	f
+readMetaStr	procHtml.c	/^int readMetaStr(inch_t *inch, char *charname, char *charset, int charsetMax)$/;"	f
+readQuotStr	procHtml.c	/^int readQuotStr(inch_t *inch, char *wd, int wMax)$/;"	f
+readSpecialTag	procHtml.c	/^int readSpecialTag(inch_t *inch, char *charset, int charsetMax)$/;"	f
+readTagName	procHtml.c	/^int readTagName(inch_t *inch, char *wd, int wMax)$/;"	f
+readTitle	procHtml.c	/^int readTitle(inch_t *inch, char *title, int titleMax)$/;"	f
+set_charset	procHtml.c	/^void set_charset(procHtml_t *ph, const char *charset, csc_bool_t isExplicit)$/;"	f
+skipComment	procHtml.c	/^int skipComment(inch_t *inch)$/;"	f
+skipTag	procHtml.c	/^int skipTag(inch_t *inch)$/;"	f
+skipWhiteSpace	procHtml.c	/^int skipWhiteSpace(inch_t *inch)$/;"	f
+state	bodyChar.c	/^	bodyCh_state_t state;$/;"	m	struct:bodyCh_t	file:
+thisUrl	procHtml.c	/^    char *thisUrl;$/;"	m	struct:procHtml_t	file:
+title	procHtml.c	/^    char title[procHtml_titleMax+1];$/;"	m	struct:procHtml_t	file:
+transStr	bodyChar.c	/^{	char transStr[bodyCh_transStrMax+1];$/;"	m	struct:bodyCh_t	file:
+trans_win1252	bodyChar.c	/^static const char *trans_win1252[256] =$/;"	v	file:
+trans_windows1252	bodyChar.c	/^static const char *trans_windows1252(csc_hash_t *context, int ch)$/;"	f	file:
+translate	bodyChar.c	/^	const char *(*translate)(csc_hash_t *unLkpTbl, int ch);$/;"	m	struct:bodyCh_t	file:
+trivial	bodyChar.c	/^	csc_hash_t *trivial;$/;"	m	struct:bodyCh_t	file:
+txt	procHtml.c	/^	char *txt;$/;"	m	struct:url_t	file:
+uVal	bodyChar.c	/^{	uint32_t uVal;  \/\/ Unicode Value. $/;"	m	struct:unLkpEnt_t	file:
+unLkpEnt_t	bodyChar.c	/^typedef struct unLkpEnt_t$/;"	s	file:
+unLkpEnt_t	bodyChar.c	/^} unLkpEnt_t;  \/\/ Unicode Lookup Entry$/;"	t	typeref:struct:unLkpEnt_t	file:
+unLkpTbl	bodyChar.c	/^	csc_hash_t *unLkpTbl;$/;"	m	struct:bodyCh_t	file:
+unLkp_cmp	bodyChar.c	/^static int unLkp_cmp(void *a, void *b)$/;"	f	file:
+unLkp_hval	bodyChar.c	/^static uint64_t unLkp_hval(void *a)$/;"	f	file:
+unLkp_new	bodyChar.c	/^static csc_hash_t *unLkp_new()$/;"	f	file:
+unLkp_trans	bodyChar.c	/^static const char *unLkp_trans(csc_hash_t *ul, int ch)$/;"	f	file:
+url	procHtml.c	/^{	char *url;$/;"	m	struct:url_t	file:
+url_free	procHtml.c	/^void url_free(url_t *u)$/;"	f
+url_new	procHtml.c	/^url_t *url_new(const char *url, const char *txt)$/;"	f
+url_t	procHtml.c	/^typedef struct url_t$/;"	s	file:
+url_t	procHtml.c	/^} url_t;$/;"	t	typeref:struct:url_t	file:
+urls	procHtml.c	/^    csc_hash_t *urls;$/;"	m	struct:procHtml_t	file:
+usage	server.c	/^void usage(const char *errStr)$/;"	f
+word	bodyChar.c	/^	char word[bodyCh_wordMax+1];$/;"	m	struct:bodyCh_t	file:
+words	bodyChar.c	/^	csc_hash_t *words;$/;"	m	struct:bodyCh_t	file:
+words	procHtml.c	/^    csc_hash_t *words;$/;"	m	struct:procHtml_t	file:

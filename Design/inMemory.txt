@@ -1,0 +1,294 @@
+					Contents
+					========
+
+*	In-Memory Data Structure and Algorithm
+	*	Introduction
+	*	Data Structure
+		*	Raw data Count of Data Documents
+		*	Raw data Documents directory(ies)
+		*	Raw Data common words file
+		*	In-memory documents array
+	*	Tasks
+		*	Add a new document
+		*	Increment document popularity
+		*	Start up
+		*	Search on a set of words
+		*	Multithreading Notes
+		*	Data Size Notes
+
+*	File and Directory Implementation
+
+
+
+					In-Memory Data Structure and Algorithm
+					======================================
+
+Introduction
+============
+
+The purpose of this document is to examine the data structure and the
+main algorithms so that the in-memory model for lookup implementation
+can be evaluated.
+
+
+Data Structure
+==============
+
+Raw data exists in the file system.
+In-memory data structures are created from raw data on startup.
+
+Raw data Count of Data Documents
+--------------------------------
+
+Raw data Documents directory(ies)
+----------------------------
+*	Lots of files in an XFS file system directory.
+*	The file name is a 128 bit hash of the URL to the file.
+*	File has zip format.  Zip contains:-
+	*	File with the URL.
+	*	Metadata file
+		*	The eTag from HTTP.
+		*	128 bit checksum of the file contents.
+		*	Date last updated from HTTP.
+		*	Document popularity information.
+	*	File with words of the document.
+*	Might have a directory of directories.  A directory for each web
+	site FQDN.  That way no problems with Ext4 directories slowing due
+	to too many files.
+
+Raw Data common words file
+--------------------------
+*	Common words
+
+In-memory documents array
+--------------------------
+*	A *[] array.  
+	*	MDocs, if we know how many documents there are.
+	*	OR nDocs, mDocs.  Can grow if more documents added.
+*	Each entry contains
+	*	128 bit hash of the URL to the file. (An index into the raw data).
+	*	Popularity.
+
+In-memory Words Lookup
+---------------------
+
+Entries contain:-
+
+*	The number of documents associated with a word.
+	*	-1 would indicate that this a common word.  In this case the
+		document associations would be a bit map.
+	*	-2 indicates that the word is trivial and should be ignored, e.g.
+		"that" "the" "is" "and" "but" "while" "a" "of" "to"
+	*	A positive number indicates the size of the document
+		associations array.
+
+*	Document associations in the form of an array of 32 bit indices
+	of in-memory documents array.
+	*	The array can grow.
+		*	nDocs, mDocs (as per usual)
+		*	Traditionally have used the formula for new arr size
+			(nDocs) when array needs to be re-allocated:-
+			*	new_mDocs = old_mDocs * 2 + 30.
+			That wastes 25% of the array on average for large arrays.
+		*	But if we know how many documents there are to be added
+			(mDm) and how many will have been added after this
+			addition (mDa), we can use the formulas:-
+			*	mm = max(1, min(2, mDm/(mDa)))
+			*	new_mDocs = old_mDocs * mm + 10.
+			That should keep the wastage to a minimum.
+		*	The document numbers have been added in-order, facilitating
+			a binary search of the list.
+
+*	The text of a word.  
+	*	Maybe.  Is this needed?  The use cases will show.
+	*	If the text of each word is not needed, then can save by
+		using the first entry of the document associations to store
+		the size of the array.
+windows-1252
+
+Tasks
+=====
+
+Add a new document
+------------------
+*	Hash the URL of the document.
+*	Look up the document in the raw data documents array.
+*	Add the document to the raw data if it is there
+*	Add the number of words of the word-document sum.
+
+Increment document popularity
+--------------------------
+*	Hash the URL of the document.
+*	Look up the document in the raw data documents array.
+*	If it is there, then increment the popularity.
+
+Start up
+--------
+*	Create empty data structures.
+
+*	For each common word in the raw data common words file
+	*	Append word to the in-memory words array, setting the document
+		array size to -1.
+
+*	For each file in raw data documents array.
+	*	Append the checksum to the in-memory documents array, noting the
+		document index.
+	*	For each word of the document.
+		*	Look up the word in the in-memory words lookup
+			*	If the word does not exist
+				*	Add the word to:-
+					*	the in-memory words array.
+					*	the in-memory words lookup.
+			*	If the word is not trivial common
+				*	Add the document index to the entry for the word in the
+					in-memory words array.
+
+Search on a set of words
+-------------------------
+*	Create an empty array of records, "wordArr", "nWords", "mWords".
+	Each record of "wordArr" will have:-
+	*	word index
+	*	the number of documents in the word.
+	*	lastPos
+*	Create empty array of records, "commonArr".  Each record of
+	"commonArr" will have:-
+	*	A bit map.
+
+*	Create empty documents array "result".
+
+*	For each search word
+	*	Find the word index.  
+		*	Is the word not found, then ignore it.
+		*	Else if the word is trivial, then ignore it.
+		*	Else if the word is common, then add it to "commonArr".
+		*	Else add it to "wordArr".
+*	If the size of "wordArr" == 0
+	*	Return empty "result".	
+
+*	Sort wordArr according to the number of documents, ascending.
+*	For each document "doc" in wordArr[0]
+	*	For each bitmap "bm" in "commonArr".
+		*	Look up "doc" in "bm"
+		*	If found, break
+	*	If doc not in all bitmaps in "commonArr"
+		*	break
+	*	For each other word array "wa" in "wordArr" (not wordArr[0])
+		*	If "doc" not in "wa"
+			// binary search. Between last pos and end. Faster.
+			*	break
+	*	If doc not in all word arrays in "wordArr"
+		*	break
+	*	add doc to "result".
+		
+*	For each "doc" in "result".
+	*	Gather URL, title and popularity from documents array.
+*	Sort by popularity and truncate to 100 docs.
+	*	Or maybe, randomly choose 100 docs from document array.
+		
+
+Multithreading Notes
+--------------------
+*	Search on a set of words can be multithreaded because it does not
+	alter the in-memory data structure, (aside from document
+	popularities).
+		
+Data Size Notes
+---------------
+*	The major determinant of the in-memory size is the sum of the
+	numbers of documents in the document associations for each word.  (4
+	bytes per document per word).  We can predict this directly from the
+	raw data. 
+
+*	If we assume 100 associations per document, then with 16G of RAM, we
+	can handle 4e7 documents.  4e7 * 100 * 4 = 16e9.
+
+*	If one site accumulated 10 documents per day for a decade, then it
+	would have 10 * 365 * 10 documents = 35600 = approx 4e4 documents.
+	This would allow our software to cope with 1000 websites.
+
+*	Might be able to increase substantially if we use document groups.
+
+
+
+			Directory Lookup
+			================
+
+Introduction
+============
+
+This attempts to make a directory-file structure equivalent of csc_hash.
+It allows you to look up a file, in a directory tree, based on a good
+hash of some key.
+
+A directory lookup offers the following advantages and disadvantages:-
+*	The "record" is a file and can hold a variable number of things,
+	such as a list of documents.  It would be faster than
+	getting a list from a relational database.
+*	It is much slower than an in-memory lookup.
+*	We are not limited by the available memory.
+*	We can start up immediately after failure.
+
+
+A dynamic growing tree like csc_hash would be slow if implemented as a
+directory, because you could not form a path, instead you have to check
+at every directory level in a lookup to see what is there.  
+
+If you know the expected number of records, however, we can use a fixed
+depth tree.  This allows us to form a path and attempt to grab the file.
+If the key exists, we get the file.  On failure then, we know the record
+does not exist.
+
+This sort of lookup is not as dynamic as a BTree +-
+
+Num Entries in a Dir and num levels of Dir Tree
+-----------------------------------------------
+*	Let M be the number of records to go into the direct
+*	Let Ned be the number of elements in a directory level.
+*	Let Nlvl be the number of elements in a directory level.
+*	Ned,nLvl = chooseNd(M,flag)
+
+File path from key.
+------------------
+*	gh = goodHash(key)
+*	hh = gh
+*	pathStr = baseDirPath
+*	For each directory level
+	*	num = hh % Ned
+	*	hh = hh / Ned
+	*	pathStr = pathStr + "/" + toDecimal(num)
+*	pathStr = pathStr + "/" + gh
+
+
+Raw data document storage
+-------------------------
+*	Lookup on hashed URL.
+*	File obtained from lookup is a zipped file containing:-
+	*	URL and document title.
+	*	Useful HTTP metadata and file checksum.
+	*	List of words.
+
+Dir Tree Words Lookup
+---------------------
+*	If the file is a simple abut potentially large, such as a list of
+	document indexes then no need to use a zip file.  Not compressing
+	would allow us to perform binary lookup on document list using
+	random reads.
+*	Lookup on hashed word.
+*	File contains:-
+	*	First record uint32_t is word type
+	*	Followed by
+		*	a bitmap if the word is common
+		*	or nothing if the word is trivial
+		*	or a list of documents, each a uint32_t document number.
+
+Document lookup
+---------------
+*	Look up URL and document title from uint32_t document number.
+*	File obtained is named not document number or its hash, but as the next hh.
+*	Each obtained file contains separated by spaces:-
+	*	document number
+	*	popularity
+	*	URL (percent encoded)
+	*	Document title (all the words to the EOL).
+*	There might be approximately "Ned" lines in the file.
+*	This avoids having too many files.

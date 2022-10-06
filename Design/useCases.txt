@@ -1,0 +1,35 @@
+						Use Cases
+						=========
+
+Initial Mapping of a website "Information Clearing House" (ICH)
+----------------------------------------------------------------
+*	Articles are to be mapped.  Intense debate is not to be mapped.
+	Luckilly intense debate has a different domain name.
+*	One approach would be to recursively follow all links.
+*	Information clearing house article URLs have a simple format.  Might
+	be better to use that.
+
+Adding comment pages for ICH
+----------------------------
+*	The intense debate pages are already mapped.  But we might have to
+	re-visit them in order to get the links to intense debate.
+*	Might be better to undestand the layout of ICH.  Just how the
+	comment pages composed.  Is it using frames?
+
+Adding another site to the Mapping
+----------------------------------
+
+Adding a site with PDF documents.
+---------------------------------
+
+Generate initial common words
+------------------------------
+
+Updating common words
+---------------------
+*	There is no deletion from common words list.
+*	Tool looks at sizes of documents files in words directory.
+	*	Compares size with common word thresholdo
+
+Search consisting of only common words
+--------------------------------------

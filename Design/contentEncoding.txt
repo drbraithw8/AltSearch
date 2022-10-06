@@ -1,0 +1,24 @@
+
+Content Encoding
+================
+
+This is not as scary as it seems.  I have no intention of dealing with
+documents with Asian characters etc:-
+
+*	ASCII
+	*	Translate non-printable characters.
+		*	Use table (256 byte array).
+
+*	Windows-1252
+	*	Simple translation table for Latin and non-printable.
+		*	Use table (256 byte array) to plain ASCII.
+
+*	UTF8
+	*	I expect to find lots of these.
+	*	Use fgetwc() to get a character.
+	*	Use lookup table to convert to plain ASCII.  
+		*	Easy to see if plain ASCII.
+		*	Use a lookup if it is not:-
+			*	Windows-1252 characters translated to ASCII.
+			*	Ignore (replace with spaces) characters outside of Windows-1252.
+

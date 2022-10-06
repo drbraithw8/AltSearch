@@ -1,0 +1,84 @@
+						 ++============++
+					     || Interfaces ||
+					     ++============++
+
+This document describes the format of the storage, and communication.
+Refer to the interfaces diagram to see how the pieces fit together.
+
+
+
+						Contents
+						========
+
+*	Nomenclature
+*	Condensed Data store
+*	URLs and Page titles
+*	Communications
+*	Miscellaneous
+
+
+						Nomenclature
+						============
+
+*	Article
+	*	A web page with a post story or article.
+	*	Article is identified using a URL.
+
+*	Web Site
+	*	A domain that contains many articles 
+
+
+					Condensed Data store
+					====================
+
+Condensed Data store
+*	All stored in a single directory tree
+
+*	One subdirectory per web site.
+
+	*	Subdirectory is named using the domain name of the website, forced
+		into simple alphanumeric characters and domain parts separated using
+		underscores.
+
+*	Each subdirectory contains:-
+
+	*	Metadata file
+		*	Ini file format file with whatever metadata turns out to be
+			useful about the website.
+
+	*	One zip file for each article.  
+		*	The zip file is named using a hash of the article URL.
+
+*	Each zip file or zip archive contains:-
+	
+	*	Metadata file
+		*	Ini file format file with whatever metadata turns out to be
+			useful about the article, but includes:-
+			*	URL
+			*	Checksum: 
+			*	AcquisitionDate:
+			*	Title
+			*	Heading
+
+	*	Words file
+		*	Words found in the file, one per line.
+		
+	
+
+						Miscellaneous
+						=============
+*	Use CscNetlib configuration and logging in the first instance.
+
+	*	The configuration should be good for the entire project.
+		*	Easy to use.
+		*	Good enough.
+
+	*	CscNetlib logging is easier to use for development.
+		*	Use it initially.
+
+	*	But CscNetlib logging does not feature log rotations.
+		When required, replace CscNetlib logging with either
+		*	syslog() {man 3 syslog}
+		*	sd_journal_print() {man sd_journal_print}.
+
+

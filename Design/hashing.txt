@@ -1,0 +1,41 @@
+						Hashing Considerations
+						======================
+
+Given n NORMAL hashes in a space of m, "expected.r" in Code/HashTest has
+formulas for working out:-
+*	probOfAnyColl(m,n): The probability of at least one hash collision.
+*	expected(m,n): The expected number of hash collisions.
+
+expected(2^32,1e6): 116
+expected(2^64,4e7): 4e-5
+expected(2^128,4e10): 2e-18.
+expected(2^128,4e7): 0 to a great many digits.
+
+Therefore, a 128 bit NORMAL hashing would guarantee no clashes.
+
+Murmur64_128 produces 128 bit hashes.  It should execute MUCH faster
+than md5 or sha256.  It is written in C and is simple enough to modify
+so that I can feed it piecemeal instead of having to give it a whole
+file in memory.
+
+I should test using a 32 bit cut down of the 128 bit hash with murmur.
+Comparison of collisions with 1e6 hashes VS the expected from normal
+hashing will tell me how good the hashing is.  I can try it a few times
+with:-
+*	different seeds
+*	hashing 1e6 numbers in sequence.
+*	Try it with these numbers at the start of a 400 character random-ish
+	string.
+
+I think I can perform testing of up to 4e7 hashes.  I should double
+check that hashing with a 64 bit cut down of the 128 bit hash with
+murmur yields 0 collisions (or close).
+
+I can do the testing without modifying Murmur.
+If testing yields positive results, THEN I can modify Murmur.
+Otherwise, I can use md4 (man md4), md5 (man md5) or sha2 (man sha2).
+These can already be fed piecemeal.
+Murmur is relatively fast.
+md4 is more than 10 times slower.
+md5 is 20% slower than md4.
+sha2 is 20% slower than md5.

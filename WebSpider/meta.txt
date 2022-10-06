@@ -1,0 +1,57 @@
+// Here are some ways of setting the charset
+// -----------------------------------------
+// 
+// *	Modern:
+// 	<meta charset="UTF-8">
+// 
+// *	http-equiv
+// 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+// 	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+//  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+// 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+// 
+// *	Applies to only a single element
+// 	<ElementName charset="value" >.....</ElementName>
+// 	<a charset="UTF-8" href="https://www.w3resource.com">www.w3resource.com</a>
+// 	<script type="text/javascript" src="w3rscripts.js" charset="UTF-8"></script>
+// 
+// *	Another variation:-
+// 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+// 
+// *	Another variation:-
+// 	<meta name="keywords" charset="UTF-8" content="Meta Tags, Metadata" />
+// 
+// *	Some example meta tags:-
+// 	 <head>
+// 	  <meta charset="UTF-8">
+// 	  <meta name="description" content="Free Web tutorials">
+// 	  <meta name="keywords" content="HTML, CSS, JavaScript">
+// 	  <meta name="author" content="John Doe">
+// 	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// 	</head>
+// 
+// *	From https://www.htmlgoodies.com/guides/charset :-
+// 	Have you ever seen one of these:
+// 	<META http-equiv=”Content-Type” content=”text/html; charset=iso-8859-1″>
+// 	That line of text will save persons using a browser not set to display
+// 	English a lot of reloading. Here’s what it is saying:
+// 	*	http-equiv should be viewed as meaning “name”. It is most often
+// 		accompanied by:
+// 	*	content which is equal to a value. The name/value pair here works
+// 		much like it does in a form element.
+// 	*	charset states what set of characters should be used to display the
+// 		code within the document.
+// 
+// What they have in common
+// ------------------------
+// 
+// They all feature:-
+// *	The string "charset" (case insensitive).
+// 	*	terminated by something that is not isalnum()
+// *	Followed by zero or more spaces.
+// *	Folllowed by an "=".
+// *	Followed by zero or more spaces.
+// *	Possibly followed by an '"'.
+// *	Followed by a word, i.e. one or more of (isalnum(ch) || ch=='-') 
+
+

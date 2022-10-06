@@ -1,0 +1,141 @@
+*	The initial character encoding may or may not be specified in the 
+	HTTP headers.  In the case of ICH, it is not.
+
+*	Provide a function pointer to get the next character.  It will deal
+	with the character encoding and return a single character every time
+	it is called:-
+
+		int getOneChar(FILE *fp);
+	
+
+Atomic HTML Entities
+--------------------
+*	Atomic HTML Entities.  There is no possibility of meaningful HTML
+	tags within:-
+
+	*	Reading a HTML comment.
+
+	*	Reading a <script> tag.
+		*	The reader must understand string literals, because they
+			could contain a </script> tag.
+		*	Outside of string literals, "< /" would not be legal
+			Javascript, so we need to look out for an ending </script>
+			tag.
+		
+	*	Reading a <style> tag.
+		*	It has CSS.  Might be able to get away with using the
+			Javascript code.
+
+	*	<meta> tags within a <head> tag need to be parsed for
+		information about the character encoding.
+
+
+Non-Atomic HTML Entities
+------------------------
+
+*	Closing tags
+	*	Some tags always have a closing tag.
+	*	Some tags never have a closing tag.
+	*	Some tags sometimes have a closing tag.
+
+*	Most tags, opening or closing can simply be ignored:-
+	*	<i>, <b>, <u>
+	*	<img>, <br>, <hr>
+	*	<table>, <th>, <tr>, <td>
+	*	<h1>, <h[1-9]>
+	*	<ol>, <ul>, <li>
+	*	<unknown>
+
+*	Some need to be scanned, and then ignored:-
+	*	<a> and <a/> need to be scanned for "href=".
+	*	</a> can be ignored.
+
+*	Some tags affect the behaviour.
+	*	<body> turns on the capture of text.  </body> turns off the
+		capture of text.
+	*	I dont know of any other non-atomic HTML entities that turn on
+		or off the capture of text.
+
+*	What to do with <pre>?
+
+
+Capture of Text
+===============
+
+Characters used
+---------------
+
+*	Digits before a word are ignored.  Digits after or in the middle of
+	a word are part of the word.
+
+*	The minus sign before or after a word are ignored.  A single minus
+	sign within a word is permitted, but only if it is single.
+
+*	Characters other than digits, letters and the minus sign are
+	converted to spaces, and separate words.
+	*	Includes the apostrophe.  Single letter words should be ignored.
+
+*	Uppercase characters should be converted to lowercase, but only
+	after noting whether the word began with a capital letter.  See
+	Plurals, below.
+
+Plurals
+-------
+
+*	There are 100,000 words in /usr/share/dict/british-english. 
+
+*	I need to think about words ending in s:-
+	*	"Davros" and "Davos" are legitimate words.
+		*	Note they began with capital letters.
+	*	"accessory", "accessories".
+	*	"moss", "mosses".
+	*	"nemeses"
+
+*	There 21,000 words ending in "s" /usr/share/dict/american-english
+	and 21,000 in /usr/share/dict/british-english. 
+
+*	Here are some general rules:-
+	*	Ones beginning with a capital letter cannot be ignored.
+	*	If it ends with "ss", or "ies", then plurality cant be discarded.
+	*	Otherwise, ending with "s":-
+		*	Usually just drop the s.
+	*	Otherwise, ending with "es" or "s":-
+		*	There are 6500 of these in /usr/share/dict.
+		*	Usually just drop the s.
+
+
+Approach 1
+----------
+
+*	Accept pluralised words as a word on their own.
+	*	Its easier.
+	*	But it wont pick up all matches.
+
+
+Approach 2
+----------
+
+*	There are 100,000 words in /usr/share/dict/???????-english. 
+
+*	If a word follows another, and begins with a capital letter:-
+	*	Accept the word.
+
+*	If a word begins a sentence, and it is not in the dictionary:-
+	*	Accept the word.
+
+*	If the word does not end in "s":-
+	*	Accept the word.
+
+*	If the word ends in "ies":-
+	*	If there is a matching word in the dictionary with the ending
+		"ies" replaced with "y":-
+		*	Accept the non-pluralised version of the word.
+	*	Else
+		*	Accept the word.
+		
+*	If there is a matching word in the dictionary without the ending "s":
+	*	Accept the non-pluralised version of the word.
+
+*	Else
+	*	Accept the word.
+

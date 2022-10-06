@@ -1,0 +1,59 @@
+						File System Considerations
+						==========================
+
+We could potentially use a different file system
+
+NTFS
+====
+*	Has a hard limit of 2^32 files in the file system.
+
+
+Ext4
+====
+
+*	Configurable limit of inodes.
+	*	-i parameter on mke2fs.
+
+*	Uses Htree.
+	*	but 2 level only.
+	*	Might get slow around 3e7 files.
+
+*	Has hard limit of 2^32 files per directory.
+	*	Might slow down before that point.
+
+*	Directories get fragmented if directory grows bigger than 4096 bytes.
+	*	https://www.sans.org/blog/understanding-ext4-part-6-directories
+		suggests a max size of 500.
+	*	Two letters from base64 would give 4096 entries, which is too
+		much.  Therefore one letter in each subdirectory.
+
+
+Consider MariaDb
+================
+I seem to be using the file system as a database.
+
+Possible Benefits
+-----------------
+
+*	Simpler implementation.
+
+*	Less hassle.
+	*	Not worrying about file system limitations as mentioned above.
+
+*	Consistent good performance
+
+Possible Disadvantages
+----------------------
+*	Slower than in-memory implementation.
+
+*	MIGHT be much slower than file implementation due to associations.
+	*	Really dont know until tested.
+
+*	Tables:-
+	*	Words
+		*	Lookup is fast
+	*	Documents
+		*	Lookup is fast
+	*	Associations: (word,document) pairs
+		*	Lookup is slow
+	

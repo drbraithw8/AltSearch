@@ -1,0 +1,395 @@
+
+Webspider
+=========
+ 
+I wont find my ideal web spider out there, but:-
+*	https://www.httrack.com looks good.
+*	I might make modifications to an existing web crawler.
+*	Initially, I might get what I want by post-processing a directory
+	created by an existing web crawler.
+ 
+Parameters
+----------
+*	ddir: Destination directory
+*	domLimit:  A domain name (?or perhaps even a set of?) that the web
+	spider will not go outside of.
+*	startUrl:  A starting point for recursively visiting all HTML (and
+	PDF) files.
+ 
+Features
+--------
+*	It should handle:-
+	1:	SSL or TLS
+	2:	HTTP 2
+	3:	Different content encodings such as ASCII, 
+ 
+Resulting Output Directory
+--------------------------
+*	Lots of files in an file system directory.
+*	The file name is a 128 bit hash of the URL to the file.
+*	File has zip format.  Zip contains:-
+	*	File with the Document Heading and the URL.
+	*	Metadata file
+		*	Document encoding.
+		*	The eTag from HTTP.
+		*	Date last updated from HTTP.
+		*	128 bit checksum of the file contents.
+		*	Document popularity information.
+	*	File with words of the document.
+*	Might have a directory of directories.  A directory for each web
+	site FQDN.  That way no problems with Ext4 directories slowing due
+	to too many files.
+
+
+9 June 2022
+===========
+I originally began to look at gnuTls to create my own recursive gatherer.
+It would do ALL of the processing and not create intermediate files that
+consumed extra space on the hard drive.
+ 
+It got complicated:-
+1)	SSL or TLS and authentication.
+2)	HTTP 2
+	*	Seems even ICH no longer permits HTTP/1.1.
+	*	Seems SO complicated.
+3)	Different content encodings such as ASCII.
+ 
+Maybe if I tried to do everything from scratch, I would not have time to
+do anything else.
+ 
+I will have to use an existing web crawler to do the work for me.  It
+will most likely copy whole files initially.  I will have to perform
+post processing.
+
+
+11 June 2022
+============
+ 
+Found options in wget.  -S gets the HTTP headers.  -O lets me
+specify where the output (HTTP+Data) goes.  It also permits me to add
+any header, e.g. "etag:" etc.  Clearly, I COULD make my spider from
+wget.  It would probably be a better option than other things that I
+explored so far.
+ 
+On testing, it seems that ICH delivered the data in HTTP/1.1 form.  I
+had assumed that ICH was refusing to work with HTTP/1.1, because I get
+the response "not found".  Hmmm... What went wrong?-
+*	I used the headers culled from firefox.
+	*	Was there some sort of spelling mistake?
+	*	Was my HTTP faulty?
+	*	Was the TLS client that I used faulty?
+ 
+I shall proceed as follows:-
+*	Try sending the request via gnuTlsCli.  See if I can get this to
+	work.
+*	Get and compile wget code, and modify it to print the headers sent.
+*	Use the text from wget as input to gnuTlsCli.  See if I can get this to
+	work.
+ 
+If the above experiment goes well, then maybe I can turn gnuTlsCli into
+a subroutine or a class, or ....
+
+
+12 June 2022
+============
+*	wget successfully gets the information from ICH.
+
+	gnutls-cli informationclearinghouse.info <testIch.http
+
+*	Could find no useful parameters in wget that would allow me to find
+	out what HTTP headers it used.
+*	Tried to find out what headers wget used by examining the code.
+	Unfortunately that seemed hard, as the approach seems non-obvious,
+	and there were 12000 lines of code.
+*	Tried to point wget at gnutls-serv.  Unfortunately, I could not do
+	this without creating certificates.
+
+
+13 June 2022
+============
+*	Created certificates to use with gnutls-serv.  Used the instructions
+	found in "man gnutls-serv":-
+ 
+	*	Created my own certificate authority.  
+ 
+			certtool --generate-privkey > x509-server-key.pem
+			echo 'organization = GnuTLS test server' > server.tmpl
+			echo 'cn = test.gnutls.org' >> server.tmpl
+			echo 'tls_www_server' >> server.tmpl
+			echo 'encryption_key' >> server.tmpl
+			echo 'signing_key' >> server.tmpl
+			echo 'dns_name = test.gnutls.org' >> server.tmpl
+			certtool --generate-certificate
+					 --load-privkey x509-server-key.pem
+					 --load-ca-certificate x509-ca.pem
+					 --load-ca-privkey x509-ca-key.pem
+					 --template server.tmpl
+					 --outfile x509-server.pem
+ 
+	*	Used my certificate authority to sign my own certificate:-
+ 
+			certtool --generate-privkey > x509-ca-key.pem
+			echo 'cn = GnuTLS test CA' > ca.tmpl
+			echo 'ca' >> ca.tmpl
+			echo 'cert_signing_key' >> ca.tmpl
+			certtool --generate-self-signed
+					 --load-privkey x509-ca-key.pem
+					 --template ca.tmpl
+					 --outfile x509-ca.pem
+ 
+*	Then I could use wget to request a file from gnutls-serv.  Used the
+	instructions found in "man gnutls-serv":-
+ 
+				gnutls-serv --http
+							--x509cafile x509-ca.pem
+							--x509keyfile x509-server-key.pem
+							--x509certfile x509-server.pem
+ 
+*	Now wget and gnutls could talk to each other, and wget could get a
+	simple "hello world" file generated by gnutls-serv (regardless of
+	what file you may ask for).  However, at this point I could still
+	not see the headers used by gnutls.  
+ 
+*	Then I compiled gnutls.  Took a while, but compiled OK.  Ran the
+	server.  OK:-
+ 
+				$HOME/Code/gnutls-3.6.16/src/gnutls-serv
+							--http
+							--x509cafile x509-ca.pem
+							--x509keyfile x509-server-key.pem
+							--x509certfile x509-server.pem
+ 
+*	Then searched the source code of serv.c and found a place in the
+	code where the HTTP headers were searched.  Printed the code from
+	there to stderr.  OK.  Got the headers:-
+ 
+				GET /temp1.html HTTP/1.1
+				User-Agent: Wget/1.20.3 (linux-gnu)
+				Accept: */*
+				Accept-Encoding: identity
+				Host: localhost:5556
+				Connection: Keep-Alive
+ 
+*	Used these headers in combination with gntls-cli.  OK.
+ 05/25
+*	Tried to use these headers in combination with my TLS client code.
+	FAIL:-
+				HTTP/1.1 404 Not Found
+				Date: Mon, 13 Jun 2022 06:26:53 GMT
+				Server: Apache/2.2.15 (Red Hat)
+				Content-Length: 304
+				Connection: close
+				Content-Type: text/html; charset=iso-8859-1
+ 
+*	I have no idea why this failed.  My next approach is to:-
+	*	Hack the code of gnutls-cli.
+	
+	*	But before I can do that, I need to separated it out from the
+		code in the gnutls src directory.  This may prove hard.  See how
+		it goes.  From the makefile:-
+
+		gnutls_cli_SOURCES = cli.c common.h common.c socket.c socket.h \
+			inline_cmds.h $(BENCHMARK_SRCS) $(am__append_10)
+		gnutls_cli_LDADD = ../lib/libgnutls.la -lm $(am__append_11) \
+			libcmd-cli.la $(LIBOPTS) ../gl/libgnu.la $(LTLIBINTL) \
+			$(LIBIDN_LIBS) $(LIBSOCKET) $(GETADDRINFO_LIB) \
+			$(LIB_CLOCK_GETTIME) $(SERVENT_LIB) gl/libgnu_gpl.la
+		libcmd_cli_la_SOURCES = cli-args.def
+		nodist_libcmd_cli_la_SOURCES = cli-args.c cli-args.h
+		gnutls_cli_debug_SOURCES = cli-debug.c tests.h tests.c \
+				socket.c socket.h common.h common.c
+
+
+14 June 2022
+============
+
+IDEALLY it would be NICE to use the gnutls library rather than the
+gnutls program gnutls-cli.  But the use of gnutls-cli is a good option:-
+*	I will probably save a week or so by not learning TLS, and by not
+	le3arning the gnutls library.
+*	I wont have to maintain any gnutls code every time they up the anti.
+*	I dont imagine that gnutls will consume too much memory or CPU.
+*	I already have full control over the HTTP headers.
+*	I can now move ahead, and come back to this later if I need to.
+ 
+Before I move on, I want to find out why ICH rejected the firefox
+headers, but accepted the wget headers.  I will experiment.
+ 
+ffIch.http Accepted:-
+	GET /57052.htm HTTP/1.1
+	Host: www.informationclearinghouse.info
+	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+	Accept-Language: en-US,en;q=0.5
+	Accept-Encoding: gzip, deflate, br
+	Connection: Close
+ 
+wgetIch Accepted:-
+	GET /57052.htm HTTP/1.1
+	User-Agent: Wget/1.20.3 (linux-gnu)
+	Accept: */*
+	Accept-Encoding: identity
+	Host: informationclearinghouse.info
+	Connection: Close
+ 
+I have no idea why ffIch seemed not to work before.
+ 
+The HTML document that I downloaded, without any images, etc, has 24091
+bytes.  If I use gzip, the size is 8519.  If I am going to use popen() for
+gnutl-cli, then there is also no problem to use popen() with gunzip.
+
+
+15 June 2022
+============
+
+Created csumRota.  Not sure why I did it.  Probably due to an emotional
+attachment to it.  It probably could be improved and speeded up by
+rewriting it as a 64 bit thing instead of an 8/16 bit thing.  But for
+now, I shall finish it off and use it to checksum files.
+
+Downloaded files will probably come in gzip format:
+	"Accept-Encoding: gzip, identity"
+
+Initially
+---------
+
+PDF handling later.
+
+webspider startUrl urlBounds tempDir rawDataDir
+
+*	The communication will happen the easy way via gnutls-cli.
+		"man 3 system"
+
+*	The header will be copied verbatim to a temporary file.
+
+*	The gunzipping, if any, will be performed to a temporary file.
+		"man 3 popen"
+
+*	A program will be used for character set translation and check-summing.
+	
+	*	Checksum filtering on the way in is problematic, since the
+		obvious way of making the checksum the first line does not make
+		sense because the checksum will only have been calculated AFTER
+		the last character of the file has been processed.
+
+	*	Do it this way for HTML:-
+		popen("toAscii --in inFile --out aciiFile", "r");
+		*	Translates to ASCII
+		*	Stdout from the command gives the checksum.
+		*	Support just html for now.  PDF handling later.
+		*	Dont bother with URLS from PDF.
+
+*	The communication program will then parse asciiFile and extract:-
+	*	rawWords.  Write to file in dir in rawDataDir.
+	*	URLS that are both new within urlBounds
+		get added to the list of URLs to spidered.
+
+
+16th and 17th June 2022
+=======================
+
+*	rota checksumming is finished
+	*	Sha256 would have done it perfectly, so I guess I did not even
+		need to do that.
+
+How to create toAscii?
+----------------------
+
+1:	I have ideas on how to code my own.  My guess-timate based how long
+	to make toAscii is "2 weeks", on gut feelings:
+	*	1 week to 4 weeks, if I was able to code solidly.
+	*	More like 4 weeks going by the size of grobian html2ascii.
+
+2:	I noticed the python html2ascii (https://github.com/aaronsw/html2text).
+
+3:	I see that html2ascii (https://github.com/grobian/html2text) is
+	written in C++ and has 5400 lines of code.  (perspective:-
+	cscnetlib:8700, quickbeam:2100, cafe:9900.)  
+	*	This is standard on Linux.  A testament to its quality.
+	*	I could modify this to get what I want.
+		*	Add URL scanning.
+		*	Clean up the output.
+	*	Or I could use it as-is, and augment by:-05/25
+		*	Filter out unwanted characters.
+		*	Using separate URL scanner.
+
+4:	Looked at myHtml (https://github.com/lexborisov/myhtml) superseded by
+	(https://github.com/lexbor/lexbor) is a DOM HTML parser written
+	in 217000 lines of code.  I think it was not for me:-
+	*	I do not want to construct a tree in memory representing the
+		HTML.  I just need to pass through it, without allocating a
+		great deal of memory.
+	*	Also, it memory mapped the html file.
+	*	It is 217000 lines of code, and I dont want to touch it.
+
+5:	Looked at Saxxy (https://github.com/marmeladema/Saxxy).  It was much
+	more to my liking (just 564 lines of code).  However, it memory
+	mapped the html file.  But at 564 lines of code, I think I can:-
+	*	Test it to see if it does what I want.
+	*	Copy the design, and rewrite without memory mapping, and
+		improve until it does what I want.
+
+Options 3 and 5 look good.  My plan is to:-
+*	Wade through a description of HTML so that I know what I might be up
+	against.
+*	Obtains samples of HTML articles.
+*	Create a test suite.
+*	Make a decision.
+
+
+20 June 2022
+============
+
+Looked at html2text.  See html2text.txt.
+----------------------------------------
+
+Useful options supplied directly to html2text
+.............................................
+
+-ascii
+	By default, when -nometa is supplied, html2text uses  UTF-8  for
+	the output. Specifying this option, plain ASCII is used instead.  To
+	find out how non-ASCII characters are rendered, refer to  the file
+	"ascii.substitutes".
+
+-o output-file
+	Write the output to output-file instead of  standard  output.
+
+-rcfile path
+	Attempt to read the file specified in path as RC file.
+
+-links
+	Generate reference list with link targets.
+
+	Package manager version of html2text does not have this feature.
+	Nor does most of the man pages on the internet.  The source code
+	version, (https://github.com/grobian/html2text) does have this
+	version.  It is not well explained.  Will discover what this does
+	through experimentation.
+
+
+Useful options supplied via .html2textrc
+........................................
+
+*	White-space in .html2textrc must be quoted with backslashes (i.e. "\ ").
+*	There are 24 options that you can specify in .html2textrc.  I need
+	to provide no-op (do-nothing) or as near to no-op values as is
+	possible for EACH of them.
+
+Conclusion
+..........
+
+*	It works.
+
+*	It seems to work hard for everything that I am trying to turn off.
+	*	Tries to find alternative ways to mark up a document.  Tries to
+		be a plain text web browser.
+	*	Slow as a result.
+	*	Complicated as a result.
+	
+*	Can modify the code to make the link reference pipe to a different
+	stream. 
+
+*	Im starting to think that I would be better off writing something of
+	my own.
+
