@@ -17,3 +17,11 @@ Project Status
 --------------
 This project is just getting started.  It has a long way to go before it
 yields anything useful.
+
+Author and Licensing
+--------------------
+Author: Stephen Braithwaite Toowoomba Queensland Australia
+This work is licensed under a
+*	Creative Commons Attribution-ShareAlike 4.0 International License.
+*	http://creativecommons.org/licenses/by-sa/4.0
+
