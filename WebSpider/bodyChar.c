@@ -332,9 +332,17 @@ static void bodyCh_word(bodyCh_t *bc)
 // A piece of code from hell.  Ignores URLs.  Ignores & escapes generally,
 // but interprets &# escapes.  Divides text into words.
 static void doCh(bodyCh_t *bc, int ch)
-{	if (bc->state == bodyCh_state_Amp)
-	{	if (ch == ';')
-		{	bc->state = bodyCh_state_None;
+{
+// The state indicates if we are processing:-
+// * An &..; escape.
+// * A URL.
+// * None of the above.
+	if (bc->state == bodyCh_state_Amp)
+	{	if (ch == ';')                      
+		{ // The end of the escape.
+			bc->state = bodyCh_state_None;   // Next paragraph deals with escaped character.
+ 
+		// Now interpret the escaped character.
 			char *str = bc->amp;
 			str[bc->iAmp] = '\0';
 			ch = *str++;
@@ -358,14 +366,17 @@ static void doCh(bodyCh_t *bc, int ch)
 			}
 		}
 		else
-		{	if (bc->iAmp < bodyCh_ampMax)
+		{ // We are still reading the characters of the escape.
+			if (bc->iAmp < bodyCh_ampMax)
 			{	bc->amp[bc->iAmp++] = ch;
 			}
 		}
 	}
  
 	if (bc->state == bodyCh_state_None)
-	{	if (isalnum(ch) || ch=='\'')
+	{ // Normal chars or escaped resulting char.
+ 
+		if (isalnum(ch) || ch=='\'')
 		{	if (bc->iWord < bodyCh_wordMax)
 			{	bc->word[bc->iWord++] = ch;
 			}	

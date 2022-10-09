@@ -14,11 +14,14 @@ Contents
 
 About this document
 ===================
-This document covers 4 issues
+This document is about the creation of a special dictionary that maps
+some words to others.  It covers 4 issues:
 1) Plurals
 2) Possessives
 3) Contractions
 3) Americanisation
+
+It does not cover the contraction of double letters into single letters.
 
 
 Motivation
