@@ -19,7 +19,9 @@ some words to others.  It covers 4 issues:
 1) Plurals
 2) Possessives
 3) Contractions
-3) Americanisation
+4) Americanisation
+5) Repeated consonants.
+
 
 It does not cover the contraction of double letters into single letters.
 
@@ -42,6 +44,8 @@ Intended approach
 Runtime Algorithm
 -----------------
 *	Word converted to lowercase.
+*	Double consonants removed.
+	*	batting becomes bating.
 *	Apply lookup table.
 	*	don't -> dont (don't becomes dont)
 	*	dog's -> dog

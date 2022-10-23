@@ -1,1 +1,0 @@
-memcheck: All allocated memory chunks released.
