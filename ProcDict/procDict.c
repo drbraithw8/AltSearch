@@ -10,15 +10,12 @@
 
 #include "dict.h"
 
-// -------------------------------------------------------
-
 
 char *progName;
 void usage()
 {	fprintf(stderr, "Usage: %s dictPath britPath outPath\n", progName);
 	exit(1);
 }
-
 
 
 static csc_list_t *readEntList(const char *path)
@@ -80,7 +77,7 @@ static void britEndSubs( csc_hash_t *dict, csc_hash_t *brit
  
 // Make new empty list.
 	csc_list_t *newEnts = NULL;
- 
+
 // Search and make new entries.
 	csc_hash_iter_t *iter = csc_hash_iter_new(dict);
 	while ((entX=csc_hash_iter_next(iter)) != NULL)
@@ -105,14 +102,14 @@ static void britEndSubs( csc_hash_t *dict, csc_hash_t *brit
 	}
 	csc_hash_iter_free(iter);
  
-// Add in the new entries.
+// Add in the new entries.unicodeLkup.txt
 	for (csc_list_t *p=newEnts; p!=NULL; p=p->next)
 	{	entX = p->data;
 		if (!csc_hash_addex(dict, entX))
 		{	free(entX);
 		}
 		else
-		{	fprintf(stdout, "%s %s\n", entX+1, entX+entX[0]);
+		{	// fprintf(stdout, "%s %s\n", entX+1, entX+entX[0]);
 		}
 	}
  
@@ -167,7 +164,7 @@ static void britInSubs( csc_hash_t *dict, csc_hash_t *brit
 		{	free(entX);
 		}
 		else
-		{	fprintf(stdout, "%s %s\n", entX+1, entX+entX[0]);
+		{	// fprintf(stdout, "%s %s\n", entX+1, entX+entX[0]);
 		}
 	}
  
@@ -227,7 +224,7 @@ static void dictEndSubs(csc_hash_t *dict, const char *srch, const char *repl)
 	// Add in new substitution entry.
 		csc_bool_t ret = csc_hash_addex(dict, newEntX);
 		csc_assert(ret);
-		fprintf(stdout, "%s %s\n", newEntX+1, newEntX+newEntX[0]);
+		// fprintf(stdout, "%s %s\n", newEntX+1, newEntX+newEntX[0]);
 	}
  
 // Free list.
@@ -297,14 +294,14 @@ static void unrollSubsts(csc_hash_t *dict)
 	// Add in new substitution entry.
 		csc_bool_t ret = csc_hash_addex(dict, newEntX);
 		csc_assert(ret);
-		fprintf(stdout, "%s %s\n", newEntX+1, newEntX+newEntX[0]);
+		// fprintf(stdout, "%s %s\n", newEntX+1, newEntX+newEntX[0]);
 	}
  
 // Free list.
 	csc_list_free(newEnts);
 }
 
-// Adds new word entries to the dictionary, or replace existing entries The
+// Adds new word entries to the dictionary, or replace existing entries. The
 // file 'fpath' contains words one per line, and each line possibly has a
 // substitution entry.  For each of these words:- If they exist in 'dict',
 // then they will be replaced by the word (and the substitution entry, if
@@ -401,13 +398,14 @@ void main(int argc, char **argv)
  
 // Read in British dictionary.
 	csc_hash_t *brit = readDictPath(argv[2]);
+	if (dict == NULL)
 	{	fprintf( stderr
 			   , "Error: Could not open file \"%s\" for read!\n"
 			   , argv[2]
 			   );
 		usage();
 	} 
-
+ 
 // Operations
 	britEndSubs(dict, brit, "ize", "ise");
 	britEndSubs(dict, brit, "er", "re");
@@ -434,7 +432,7 @@ void main(int argc, char **argv)
 // Add in any new words and their substitutions.
 	dict_addReplace(dict, "addReplace.txt");
 	dict_remove(dict, "remove.txt");
-
+ 
 // Unroll multiple indirects.
 	unrollSubsts(dict);
  

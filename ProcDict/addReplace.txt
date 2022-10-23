@@ -1,6 +1,8 @@
+caldron
 cauldron caldron
 arent
 aren’t arent
+cant
 can’t cant
 couldnt
 couldn’t couldnt
@@ -35,11 +37,13 @@ they’re
 theyve
 they’ve theyve
 we’d
+were
 we’re were
 we’ve
 weren’t
 what’ll
 what’re
+whats
 what’s whats
 what’ve
 where’s wheres
@@ -49,6 +53,7 @@ who’re
 whos
 who’s whos
 who’ve
+wont
 won’t wont
 wouldnt
 wouldn’t wouldnt

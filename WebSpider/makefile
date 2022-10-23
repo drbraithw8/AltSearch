@@ -8,9 +8,7 @@ ALL := procHtml
 
 all: $(ALL)
 
-dict.o: ../Plurals/dict.c
-
-procHtml: server.o bodyChar.o inch.o procHtml.o
+procHtml: server.o bodyChar.o inch.o procHtml.o unicodeLkup.o
 	gcc $^ $(LIBS) -o $@
 
 clean:

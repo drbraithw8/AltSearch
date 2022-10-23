@@ -4,6 +4,7 @@
 #include <ctype.h>
 
 #include <CscNetLib/std.h>
+#include <CscNetLib/cstr.h>
 #include <CscNetLib/alloc.h>
 #include <CscNetLib/hash.h>
 #include <CscNetLib/iniFile.h>

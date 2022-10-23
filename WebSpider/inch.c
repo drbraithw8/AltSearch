@@ -23,135 +23,6 @@ typedef struct inch_t
 #define que_isfull(inch) ((inch->queFree+1) % (N_Lookahead+1) == inch->queFirst)
 
 
-// Gets a UTF8 character.
-// Ignores (tries to skips over) illegal characters.
-static int inCh_utf8(FILE *fin)
-{	csc_bool_t isOk = csc_FALSE;
-	int ch;
-	enum
-	{	Mask = 31
-	,	Cmpr = 6
-	,	Shft = 5
-	,	ShftMin = 3
-	,	ShftN = 6
-	,	SixBits = 63
-	};
- 
-	while (!isOk)
-	{	int byteCount;
-		int byte = getc(fin);
- 
-		if (byte < 128)
-		{	return byte;
-		}
-		else
-		{	int iShft;
-			int mask = Mask;
-			int cmpr = Cmpr;
-			for (iShft=Shft; iShft>=ShftMin; iShft--)
-			{	if (byte>>iShft == cmpr)
-				{	ch = byte & mask;
-					break;
-				}
-				cmpr = (cmpr+1)<<1;
-				mask >>= 1;
-			}
-			if (iShft < ShftMin)
-			{	isOk = csc_FALSE;
-				byteCount = 0;
-			}
-			else
-			{	isOk = csc_TRUE;
-				byteCount = (Shft+1) - iShft;
-			}
-		}
- 
-		int i;
-		for (i=0; i<byteCount; i++)
-		{	byte = getc(fin);
-			if (byte == -1)
-			{	return -1;
-			}
-			else if (byte>>ShftN == 2)
-			{	ch = (ch<<ShftN) + (byte & SixBits);
-			}
-			else
-			{	break;
-			}
-		}
-		if (i != byteCount)
-		{	isOk = csc_FALSE;
-		}
-	}
- 
-	return ch;
-}
-// static int utf8_putc(int ch, FILE *fout)
-// {	if(ch < 0x80) // Single byte-width
-//     {	fputc(ch, fout);
-//         return 1;
-//     }
-//     else if(ch < 0x800) // Double byte-width
-//     {	fputc((ch>>6) | 0300, fout);
-//         fputc((ch & 077) | 0200, fout);
-//         return 2;
-//     }
-//     else if(ch < 0x10000) // Triple byte-width
-//     {	fputc((ch>>12) | 0340, fout);
-//         fputc(((ch>>6) & 077) | 0200, fout);
-//         fputc((ch & 077) | 0200, fout);
-//         return 3;
-//     }
-//     else if(ch < 0x200000) // Quadruple byte-width
-//     {	fputc((ch>>18) | 0360, fout);
-//         fputc(((ch>>12) & 077) | 0200, fout);
-//         fputc(((ch>>6) & 077) | 0200, fout);
-//         fputc((ch & 077) | 0200, fout);
-//         return 4;
-//     }
-//     return 0;
-// }
-// void main(int argc, char **argv)
-// {	char *testSeq[] = {"", "a", "abaZaa", "Ώ", "ΏΏΏΏ", "ﬆ", "ﬆﬆﬆ", "ΏﬆaaﬆΏa"};
-// 	FILE *fin, *fout;
-// 	int ch;
-//  
-// 	int nStr = csc_dim(testSeq);
-// 	for (int i=0; i<nStr; i++)
-// 	{ 
-// 	// Write the file.
-// 		fout = fopen("temp1.txt", "w");
-// 		fprintf(fout, "%s", testSeq[i]);
-// 		fclose(fout);
-//  
-// 	// Read it in and out char by char.
-// 		fin  = fopen("temp1.txt", "r");
-// 		fout = fopen("temp2.txt", "w");
-// 		ch = inCh_utf8(fin);
-// 		while (ch != -1)
-// 		{	utf8_putc(ch, fout);
-// 			ch = inCh_utf8(fin);
-// 		}
-// 		fclose(fin);
-// 		fclose(fout);
-//  
-// 	// Read it back in as a string.
-// 		fin  = fopen("temp2.txt", "r");
-// 		char str[20+1];
-// 		fgets(str, 20, fin);
-// 		if (strcmp(str,testSeq[i]) == 0)
-// 		{	fprintf(stdout, "utf8_%d pass\n", i);
-// 		}
-// 		else
-// 		{	fprintf(stdout, "utf8_%d FAIL\n", i);
-// 		}
-// 		fclose(fin);
-// 	}
-// }
-
-
-
-
 
 static int inCh_ascii(FILE *fin)
 {	return getc(fin);
@@ -284,7 +155,7 @@ csc_bool_t inch_set_getAscChar(inch_t *inch, const char *charset)
 	{	inch->getCh = inCh_ascii;
 	}
 	else if (csc_strieq(charset,"UTF-8"))
-	{	inch->getCh = inCh_utf8;
+	{	inch->getCh = unLkp_getUtf8;
 	}
 	else
 	{	isOk = csc_FALSE;
