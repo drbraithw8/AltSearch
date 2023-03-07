@@ -160,7 +160,7 @@ csc_bool_t inch_set_getAscChar(inch_t *inch, const char *charset)
 	else
 	{	isOk = csc_FALSE;
 	}
-
+ 
 	return isOk;
 }
 

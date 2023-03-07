@@ -1,15 +1,20 @@
-								  +=========+
-								  #	Plurals #
-								  +=========+
+								  +=======================+
+								  #	Processing Dictionary #
+								  +=======================+
 
-Contents
+
+Abstract
 ========
-*	About this document
-*	Intended approach
-	*	Runtime Algorithm
-*	Creating the lookup table
-	*	Americanisation
-	*	Plurals, Possessives, and Contractions
+
+Makes a custom dictionary from the standard Linux dictionaries in the form a plain text file.  
+
+Each line (each entry) consists of a lookup word possibly followed by
+its substitution word, if the lookup word is to be substituted. 
+
+
+Status
+======
+*	Complete for now.  Code seems to work OK.  Produces useful dictionary.
 
 
 About this document
@@ -120,17 +125,17 @@ Americanisation
 
 *	For all words in Dict that do not have a substitution:
 	*	If replacing a "tion$" in word X with an "te" makes a word Y in Dict
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 	*	else if removing "ies$" in word X makes a word Y  ($ matches end of word).
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 	*	else if removing "ing$" in word X makes a word Y  ($ matches end of word).
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 	*	else if removing "ed$" in word X makes a word Y
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 	*	else if removing "es$" in word X makes a word Y
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 	*	else if removing "s$" in word X makes a word Y
-		*	add a substitution entry Y -> X to X in Dict. 
+		*	add a substitution entry X -> Y to X in Dict. 
 
 *	For all words X in Dict that have a substitution Y.
 	*	F = Y
@@ -176,7 +181,7 @@ Plurals and Possessives
 		*	If removing "s" from X results in word Y.
 			*	add substitution Y to entry X.
 
-working
+Issues
 -------
 
 What you have

@@ -26,7 +26,6 @@ char *inch_lookAhead(inch_t *inch, char buf[5]);
 // *	getAscChar() is a function for getting the char, i.e. translating to
 // 	ASCII from:-
 // 	*	windows-1252
-// 	*	windows-1252
 // 	*	UTF8
 // 	*	ASCII (no-op)
 

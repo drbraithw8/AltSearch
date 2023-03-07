@@ -403,7 +403,7 @@ void set_charset(procHtml_t *ph, const char *charset, csc_bool_t isExplicit)
 			   );
 		return;
 	}
-
+ 
 // Try to set the character set.
 	if (inch_set_getAscChar(ph->inch, charset))
 	{	if (isExplicit)
@@ -809,10 +809,7 @@ int readBody(procHtml_t *ph)
                 readTagName(inch, tag, tagMax);
                 ch = skipTag(inch);
                 if (csc_strieq(tag, "aside"))
-				{
-csc_CKCK; fprintf(stderr, "readBody() nAside=%d\n", nAside);
-					nAside--;
-csc_CKCK; fprintf(stderr, "readBody() nAside=%d\n", nAside);
+				{	nAside--;
 				}
                 else if (csc_strieq(tag, "body"))
                 {   return ch;
@@ -835,10 +832,7 @@ csc_CKCK; fprintf(stderr, "readBody() nAside=%d\n", nAside);
 					}
 				}
 				else if (csc_strieq(tag,"aside"))
-				{
-csc_CKCK; fprintf(stderr, "readBody() nAside=%d\n", nAside);
-					nAside++;
-csc_CKCK; fprintf(stderr, "readBody() nAside=%d\n", nAside);
+				{	nAside++;
 				}
                 else
                 {   ch = skipTag(inch);

@@ -12,7 +12,7 @@
 #include "../WebSpider/unicodeLkup.h"
 
 
-csc_bool_t isConsonant(ch)
+csc_bool_t isConsonant(int ch)
 {	switch (ch)
 	{	case 'q': case 'w': case 'r': case 't': case 'y': case 'p':
 		case 's': case 'd': case 'f': case 'g': case 'h': case 'j':
@@ -167,6 +167,14 @@ char *dictEntry_new(char *lkup, char *target)
  
 // Home with the bacon.
 	return ent;
+}
+
+
+void freeCharTrans()
+{	if (utf8Lkup)
+	{	csc_hash_free(utf8Lkup);
+		utf8Lkup = NULL;
+	}
 }
 
 

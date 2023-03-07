@@ -5,7 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 ALL	makefile	/^ALL := procHtml$/;"	m
-CKCK	inch.h	41;"	d
+CKCK	inch.h	40;"	d
 LIBS	makefile	/^LIBS :=  -L \/usr\/local\/lib -lCscNet -lpthread$/;"	m
 N_Lookahead	inch.c	12;"	d	file:
 __gtagDataLayer	HtmlSamples/consortium1.html	/^					function __gtagDataLayer() {$/;"	f
@@ -19,7 +19,7 @@ __gtagTrackerIsOptedOut	HtmlSamples/grayzone1.html	/^				function __gtagTrackerI
 __gtagTrackerOptout	HtmlSamples/consortium1.html	/^				function __gtagTrackerOptout() {$/;"	f
 __gtagTrackerOptout	HtmlSamples/grayzone1.html	/^				function __gtagTrackerOptout() {$/;"	f
 amp	bodyChar.c	/^	char amp[bodyCh_ampMax+1];$/;"	m	struct:bodyCh_t	file:
-asc	bodyChar.c	/^	char asc[4];   \/\/ ASCII equivalent string.$/;"	m	struct:unLkpEnt_t	file:
+asc	unicodeLkup.c	/^	char asc[4];   \/\/ ASCII equivalent string.$/;"	m	struct:unLkpEnt_t	file:
 baseUrl	procHtml.c	/^    char *baseUrl;$/;"	m	struct:procHtml_t	file:
 bc	procHtml.c	/^	bodyCh_t *bc;$/;"	m	struct:procHtml_t	file:
 bodyCh_ampMax	bodyChar.c	/^	 , bodyCh_ampMax=12$/;"	e	enum:__anon1	file:
@@ -56,7 +56,6 @@ iAmp	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
 iWdCount	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
 iWord	bodyChar.c	/^	int iWord, iWdCount, iAmp;$/;"	m	struct:bodyCh_t	file:
 inCh_ascii	inch.c	/^static int inCh_ascii(FILE *fin)$/;"	f	file:
-inCh_utf8	inch.c	/^static int inCh_utf8(FILE *fin)$/;"	f	file:
 inch	procHtml.c	/^{	inch_t *inch;$/;"	m	struct:procHtml_t	file:
 inch_curCh	inch.c	/^int inch_curCh(inch_t *inch)$/;"	f
 inch_free	inch.c	/^void inch_free(inch_t *inch)$/;"	f
@@ -112,14 +111,16 @@ trans_windows1252	bodyChar.c	/^static const char *trans_windows1252(csc_hash_t *
 translate	bodyChar.c	/^	const char *(*translate)(csc_hash_t *unLkpTbl, int ch);$/;"	m	struct:bodyCh_t	file:
 trivial	bodyChar.c	/^	csc_hash_t *trivial;$/;"	m	struct:bodyCh_t	file:
 txt	procHtml.c	/^	char *txt;$/;"	m	struct:url_t	file:
-uVal	bodyChar.c	/^{	uint32_t uVal;  \/\/ Unicode Value. $/;"	m	struct:unLkpEnt_t	file:
-unLkpEnt_t	bodyChar.c	/^typedef struct unLkpEnt_t$/;"	s	file:
-unLkpEnt_t	bodyChar.c	/^} unLkpEnt_t;  \/\/ Unicode Lookup Entry$/;"	t	typeref:struct:unLkpEnt_t	file:
+uVal	unicodeLkup.c	/^{	uint32_t uVal;  \/\/ Unicode Value. $/;"	m	struct:unLkpEnt_t	file:
+unLkpEnt_t	unicodeLkup.c	/^typedef struct unLkpEnt_t$/;"	s	file:
+unLkpEnt_t	unicodeLkup.c	/^} unLkpEnt_t;  \/\/ Unicode Lookup Entry$/;"	t	typeref:struct:unLkpEnt_t	file:
+unLkpEnt_t	unicodeLkup.h	/^typedef struct unLkpEnt_t unLkpEnt_t;$/;"	t	typeref:struct:unLkpEnt_t
 unLkpTbl	bodyChar.c	/^	csc_hash_t *unLkpTbl;$/;"	m	struct:bodyCh_t	file:
-unLkp_cmp	bodyChar.c	/^static int unLkp_cmp(void *a, void *b)$/;"	f	file:
-unLkp_hval	bodyChar.c	/^static uint64_t unLkp_hval(void *a)$/;"	f	file:
-unLkp_new	bodyChar.c	/^static csc_hash_t *unLkp_new()$/;"	f	file:
-unLkp_trans	bodyChar.c	/^static const char *unLkp_trans(csc_hash_t *ul, int ch)$/;"	f	file:
+unLkp_cmp	unicodeLkup.c	/^static int unLkp_cmp(void *a, void *b)$/;"	f	file:
+unLkp_getUtf8	unicodeLkup.c	/^int unLkp_getUtf8(FILE *fin)$/;"	f
+unLkp_hval	unicodeLkup.c	/^static uint64_t unLkp_hval(void *a)$/;"	f	file:
+unLkp_new	unicodeLkup.c	/^csc_hash_t *unLkp_new()$/;"	f
+unLkp_trans	unicodeLkup.c	/^const char *unLkp_trans(csc_hash_t *ul, int ch)$/;"	f
 url	procHtml.c	/^{	char *url;$/;"	m	struct:url_t	file:
 url_free	procHtml.c	/^void url_free(url_t *u)$/;"	f
 url_new	procHtml.c	/^url_t *url_new(const char *url, const char *txt)$/;"	f

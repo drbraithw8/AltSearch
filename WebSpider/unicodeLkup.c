@@ -223,11 +223,11 @@ csc_hash_t *unLkp_new()
 
 const char *unLkp_trans(csc_hash_t *ul, int ch)
 {	
-/*CKCK*/ fprintf(stderr, "%d ", ch);
+// /*CKCK*/ fprintf(stderr, "%d ", ch);
 	unLkpEnt_t *ent = csc_hash_get(ul, &ch);
 	if (ent == NULL)
 	{
-/*CKCK*/ fprintf(stderr, "%d ", ch);
+// /*CKCK*/ fprintf(stderr, "%d ", ch);
 		return " ";
 	}
 	else

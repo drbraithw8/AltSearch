@@ -301,6 +301,7 @@ static void unrollSubsts(csc_hash_t *dict)
 	csc_list_free(newEnts);
 }
 
+
 // Adds new word entries to the dictionary, or replace existing entries. The
 // file 'fpath' contains words one per line, and each line possibly has a
 // substitution entry.  For each of these words:- If they exist in 'dict',
@@ -453,9 +454,13 @@ void main(int argc, char **argv)
 // Free dictionaries.
 	csc_hash_free(dict);
 	csc_hash_free(brit);
+
+// Free UTF8 lookup.
+	freeCharTrans();
  
 // Bye.
 	fclose(fout);
+	csc_mck_print(stderr);
 	exit(0);
 }
  
